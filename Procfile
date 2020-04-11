@@ -1,1 +1,1 @@
-worker: tim.py
+worker: python tim.py
