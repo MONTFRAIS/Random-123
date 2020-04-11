@@ -8,12 +8,12 @@ from random import randint
 import youtube_dl
 
 api = str(os.environ.get('RIOT_KEY'))
-bot = commands.Bot(command_prefix='$')
+bot = commands.Bot(command_prefix='!')
 bot.remove_command('help')
 
 @bot.event
 async def on_ready():
-	await bot.change_presence(activity=discord.Game(name="$help"))
+	await bot.change_presence(activity=discord.Game(name="!help"))
 	print("je suis pret")
 	print("Je m'appele " + str(bot.user.name))
 
