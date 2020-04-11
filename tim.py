@@ -24,7 +24,7 @@ async def insulte(ctx, message):
 	with open("insulte.txt", "r", encoding='utf8') as f:
 		for insulte in f.readlines():
 			table_isultes.append(insulte)
-	msg = str(message)+" -> " + table_isultes[nb_alea]
+	msg = str(message)+"  ->  " + table_isultes[nb_alea]
 	msg += "cela a été prouvé"
 	await ctx.send(msg)
 '''------------------------------------------commande pour la musique-------------------------------------'''
