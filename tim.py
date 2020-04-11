@@ -18,13 +18,13 @@ async def on_ready():
 	print("Je m'appele " + str(bot.user.name))
 
 @bot.command()
-async def insulte(ctx):
+async def insulte(ctx, message):
 	table_isultes = []
 	nb_alea = randint(0, 4)
 	with open("insulte.txt", "r") as f:
 		for insulte in f.readlines():
 			table_isultes.append(insulte)
-	await ctx.send(str(table_isultes[nb_alea]))
+	await ctx.send(str(table_isultes[nb_alea])+str(message))
 '''------------------------------------------commande pour la musique-------------------------------------'''
 @bot.command()
 async def joue(ctx, url):
