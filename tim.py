@@ -21,7 +21,7 @@ async def on_ready():
 async def insulte(ctx, message):
 	table_isultes = []
 	nb_alea = randint(0, 4)
-	with open("insulte.txt", "r") as f:
+	with open("insulte.txt", "r", encoding='utf8') as f:
 		for insulte in f.readlines():
 			table_isultes.append(insulte)
 	msg = str(message)+" = "+str(table_isultes[nb_alea])
