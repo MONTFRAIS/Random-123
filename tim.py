@@ -81,5 +81,5 @@ async def help(ctx):
 	embed.set_author(name='Commande HELP')
 
 	await ctx.send(embed=embed)
-
-bot.run()
+	
+bot.run(str(os.environ.get('BOT_TOKEN')))
