@@ -24,7 +24,8 @@ async def insulte(ctx, message):
 	with open("insulte.txt", "r") as f:
 		for insulte in f.readlines():
 			table_isultes.append(insulte)
-	msg = str(message)+" est une / un "+str(table_isultes[nb_alea])
+	msg = str(message)+" = "+str(table_isultes[nb_alea])
+	msg += "\n cela a été prouvé"
 	await ctx.send(msg)
 '''------------------------------------------commande pour la musique-------------------------------------'''
 @bot.command()
