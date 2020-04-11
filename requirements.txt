@@ -1,0 +1,6 @@
+discord
+asyncio
+Pymoe
+requests
+simplejson
+youtube_dl
