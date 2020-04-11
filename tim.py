@@ -22,7 +22,7 @@ async def insulte(ctx, message):
 	table_isultes = []
 	nb_alea = randint(0, 310)
 	with open("insulte.txt", "r") as f:
-		for insulte in f.readlines():
+		for insulte in f.readlines().decode('utf-8'):
 			table_isultes.append(insulte)
 	msg = str(message)+"  ->  " + str(table_isultes[nb_alea]).decode('utf-8')
 	msg += "cela a ete prouve"
