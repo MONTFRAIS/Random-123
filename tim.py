@@ -39,7 +39,7 @@ async def joue(ctx, url):
 	if co_ch_vo == False:
 		channel = ctx.message.author.voice.channel
 		player = await channel.connect()
-		os.remove('song.mp3')
+		#os.remove('song.mp3')
 	#jouer de la musique
 	guild = ctx.message.guild
 
