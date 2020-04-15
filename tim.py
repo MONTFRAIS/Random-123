@@ -75,7 +75,7 @@ async def arrete(ctx):
 async def help(ctx):
 	texte = "insulte\n"
 	texte += "presentation\n"
-	texte += "Version : 1.0\n"
+	texte += "Version : 2.0\n"
 	embed = discord.Embed(
 		description = texte,
 		colour = discord.Colour.blue()
