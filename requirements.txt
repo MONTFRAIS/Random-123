@@ -5,3 +5,4 @@ requests
 simplejson
 youtube_dl
 PyNaCl
+opus
