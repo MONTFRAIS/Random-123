@@ -5,4 +5,3 @@ requests
 simplejson
 youtube_dl
 PyNaCl
-libopus
