@@ -86,7 +86,7 @@ async def joue_url(ctx, guild, url):
 		i = guild.id
 		if queues[i] != []:
 			url = queues[i].pop(0)
-			joue_url(ctx, guild, url)
+			await joue_url(ctx, guild, url)
 
 
 
