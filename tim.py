@@ -17,13 +17,15 @@ async def on_ready():
 	await bot.change_presence(activity=discord.Game(name="!help"))
 	print("je suis pret")
 	print("Je m'appele " + str(bot.user.name))
-	
+
 @bot.event
 async def on_command_error(ctx, error):
 	texte = ""
 	if isinstance(error, commands.MissingRequiredArgument):
 		texte = "il manque un argument lors de ton utilisation de cette commande !!!!\n"
 		texte += "tu devrais utiliser la commande help pour savoir comment utiliser cette commande"
+	elif isinstance(error, commands.CommandNotFound):
+		texte = "Commande Invalide ou Inexistante"
 	else:
 		texte = "une ERREUR s'est produite"
 
@@ -32,7 +34,7 @@ async def on_command_error(ctx, error):
 		description = texte,
 		colour = discord.Colour.blue()
 	)
-	embed.set_author(name='ERREUR')
+	embed.set_author(name=':x: ERREUR :interrobang:')
 
 	await ctx.send(embed=embed)
 
@@ -53,7 +55,9 @@ def check_queue(ctx):
 
 @bot.command()
 async def joue(ctx, url):
-	global player
+	#variable utile dans tout la def
+	guild = ctx.message.guild
+
 	# join un channel vocal
 	co_ch_vo = False
 	for x in bot.voice_clients:
@@ -62,9 +66,16 @@ async def joue(ctx, url):
 	if co_ch_vo == False:
 		channel = ctx.message.author.voice.channel
 		player = await channel.connect()
-		#os.remove('song.mp3')
+
+		#teste si fichier music deja existant si oui suppression
+
+		with os.scandir("./") as fichiers:
+			for fichier in fichiers:
+				if fichier.name == 'song'+str(guild.id)+'.mp3':
+					os.remove('song.mp3')
+	
+	
 	#jouer de la musique
-	guild = ctx.message.guild
 
 
 	ydl_opts = {
@@ -79,9 +90,9 @@ async def joue(ctx, url):
 		ydl.download([url])
 	for file in os.listdir("./"):
 		if file.endswith(".mp3"):
-			os.rename(file, 'song.mp3')
+			os.rename(file, 'song'+str(guild.id)+'.mp3')
 
-	player.play(discord.FFmpegPCMAudio('song.mp3'))
+	player.play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'))
 	players[guild.id] = player
 	print('done')
 
@@ -103,7 +114,7 @@ async def arrete(ctx):
 		players[guild.id].stop()
 		guild_voice = ctx.message.guild.voice_client
 		await guild_voice.disconnect()
-		os.remove('song.mp3')
+		os.remove('song'+str(guild.id)+'.mp3')
 
 '''------------------------------------------commande help-------------------------------------'''
 @bot.command()
