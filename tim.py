@@ -67,8 +67,10 @@ def lien_youtube_valide(url):
 			return False
 
 
-async def joue_url(ctx, url, guild):
-		#jouer de la musique
+async def joue_url(ctx, player, guild, titre, url):
+	#jouer de la musique
+	
+	await envoi(ctx, titre, "Preparation : "+str(url))
 
 	ydl_opts = {
 		'format': 'bestaudio/best',
@@ -117,10 +119,10 @@ async def joue(ctx, url, *, content=""):
 
 	if lien_youtube_valide(str(url)):
 
-		joue_url(ctx, url, guild)
+		joue_url(ctx, player, guild, titre, url)
 
 	else :
-		recherche = str(url)" "+content
+		recherche = str(url)+" "+content
 		await ctx.send(recherche)
 
 @bot.command()
