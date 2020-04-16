@@ -122,7 +122,7 @@ async def joue(ctx, url, *, content=""):
 
 	if lien_youtube_valide(str(url)) :
 
-		joue_url(ctx, titre, guild, url)
+		await joue_url(ctx, titre, guild, url)
 
 	else :
 		recherche = str(url)+" "+content
