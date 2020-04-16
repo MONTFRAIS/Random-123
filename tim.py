@@ -20,6 +20,7 @@ async def on_ready():
 
 @bot.event
 async def on_command_error(ctx, error):
+	titre = ":x: ERREUR :interrobang:"
 	texte = ""
 	if isinstance(error, commands.MissingRequiredArgument):
 		texte = "il manque un argument lors de ton utilisation de cette commande !!!!\n"
@@ -30,11 +31,14 @@ async def on_command_error(ctx, error):
 		texte = "une ERREUR s'est produite"
 
 	'''------embed pour affichage erreur--------'''
+	envoi(ctx, titre, texte)
+
+async def envoi(ctx, titre, texte):
 	embed = discord.Embed(
 		description = texte,
 		colour = discord.Colour.blue()
 	)
-	embed.set_author(name=':x: ERREUR :interrobang:')
+	embed.set_author(name=titre)
 
 	await ctx.send(embed=embed)
 
@@ -57,6 +61,7 @@ def check_queue(ctx):
 async def joue(ctx, url):
 	#variable utile dans tout la def
 	guild = ctx.message.guild
+	titre = "Music"
 
 	# join un channel vocal
 	co_ch_vo = False
@@ -94,7 +99,11 @@ async def joue(ctx, url):
 
 	player.play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'))
 	players[guild.id] = player
+	
 	print('done')
+
+	text_done_dl = "Lancement de : \n"+str(url)
+	envoi(ctx, titre, text_done_dl)
 
 @bot.command()
 async def pause(ctx):
@@ -120,14 +129,14 @@ async def arrete(ctx):
 @bot.command()
 async def help(ctx):
 	texte = "insulte\n"
+	texte += "joue\n"
+	texte += "arrete\n"
+	texte += "pause\n"
+	texte += "resume\n"
 	texte += "presentation\n"
 	texte += "Version : 2.0\n"
-	embed = discord.Embed(
-		description = texte,
-		colour = discord.Colour.blue()
-	)
-	embed.set_author(name='Commande HELP')
+	titre = 'Commande HELP'
 
-	await ctx.send(embed=embed)
+	envoi(ctx, titre, texte)
 	
 bot.run(str(os.environ.get('TOKEN')))
