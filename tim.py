@@ -31,7 +31,7 @@ async def on_command_error(ctx, error):
 		texte = "une ERREUR s'est produite"
 
 	'''------embed pour affichage erreur--------'''
-	envoi(ctx, titre, texte)
+	await envoi(ctx, titre, texte)
 
 async def envoi(ctx, titre, texte):
 	embed = discord.Embed(
@@ -103,7 +103,7 @@ async def joue(ctx, url):
 	print('done')
 
 	text_done_dl = "Lancement de : \n"+str(url)
-	envoi(ctx, titre, text_done_dl)
+	await envoi(ctx, titre, text_done_dl)
 
 @bot.command()
 async def pause(ctx):
@@ -137,6 +137,6 @@ async def help(ctx):
 	texte += "Version : 2.0\n"
 	titre = 'Commande HELP'
 
-	envoi(ctx, titre, texte)
+	await envoi(ctx, titre, texte)
 	
 bot.run(str(os.environ.get('TOKEN')))
