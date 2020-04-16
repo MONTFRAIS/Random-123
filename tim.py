@@ -59,13 +59,19 @@ async def insulte(ctx, message):
 	msg = str(message)+"  ->  " + str(table_isultes[nb_alea])
 	msg += "cela a été prouvé"
 	await ctx.send(msg)
-'''------------------------------------------commandes pour la musique-------------------------------------'''	
-async def add_queue(ctx, guild, url):
+'''------------------------------------------commandes pour la musique-------------------------------------'''
+def check_queue(ctx, guild):
+	i = guild.id
+	if queues[i] != []:
+		url = queues[i].pop(0)
+		joue_url(ctx, guild, url)
+		
+def add_queue(ctx, guild, url):
 	if guild.id in queues:
 		queues[guild.id].append(url)
 	else:
 		queues[guild.id] = [url]
-		await joue_url(ctx, guild, url)
+		joue_url(ctx, guild, url)
 
 
 def lien_youtube_valide(url):
@@ -78,33 +84,9 @@ def lien_youtube_valide(url):
 			if url[i] != lien_valide[i]:
 				succes = False
 	return succes
+	
 
-
-async def joue_url(ctx, guild, url):
-
-	def check_queue(ctx, guild):
-		i = guild.id
-		if queues[i] != []:
-			url = queues[i].pop(0)
-			await joue_url(ctx, guild, url)
-
-
-
-	# join un channel vocal ou pas
-	connecter_channel_vo = False
-	for x in bot.voice_clients:
-		if(x.guild == ctx.message.guild):
-			connecter_channel_vo = True
-	if connecter_channel_vo == False:
-		channel = ctx.message.author.voice.channel
-		player = await channel.connect()
-
-		#teste si fichier music deja existant si oui suppression
-
-		with os.scandir("./") as fichiers:
-			for fichier in fichiers:
-				if fichier.name == 'song'+str(guild.id)+'.mp3':
-					os.remove('song'+str(guild.id)+'.mp3')
+def joue_url(ctx, guild, url):
 
 	#jouer de la musique
 	
@@ -122,15 +104,29 @@ async def joue_url(ctx, guild, url):
 	for file in os.listdir("./"):
 		if file.endswith(".mp3"):
 			os.rename(file, 'song'+str(guild.id)+'.mp3')
-
-	if connecter_channel_vo == False :
-		players[guild.id] = player
 		
 	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'), after=lambda e: check_queue(ctx, guild))
 		
 	print('done')
 
-	
+async def join(ctx, guild):
+		# join un channel vocal ou pas
+	connecter_channel_vo = False
+	for x in bot.voice_clients:
+		if(x.guild == ctx.message.guild):
+			connecter_channel_vo = True
+	if connecter_channel_vo == False:
+		channel = ctx.message.author.voice.channel
+		player = await channel.connect()
+	#ajout du player si nv
+	if connecter_channel_vo == False :
+		players[guild.id] = player
+		#teste si fichier music deja existant si oui suppression
+
+		with os.scandir("./") as fichiers:
+			for fichier in fichiers:
+				if fichier.name == 'song'+str(guild.id)+'.mp3':
+					os.remove('song'+str(guild.id)+'.mp3')
 
 
 @bot.command()
@@ -143,7 +139,9 @@ async def joue(ctx, url, *, content=""):
 
 		await envoi(ctx, titre, "Preparation : "+str(url))
 
-		await add_queue(ctx, guild, url)
+		await join(ctx, guild)
+
+		add_queue(ctx, guild, url)
 
 		await ctx.channel.purge(limit=1)
 
@@ -156,7 +154,9 @@ async def joue(ctx, url, *, content=""):
 
 		await envoi(ctx, titre, "Preparation : ["+titreMusic+"]("+url_trouver+")")
 
-		await add_queue(ctx, guild, url_trouver)
+		await join(ctx, guild)
+
+		add_queue(ctx, guild, url_trouver)
 
 		await ctx.channel.purge(limit=1)
 
