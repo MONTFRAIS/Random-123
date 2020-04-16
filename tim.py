@@ -74,7 +74,7 @@ def lien_youtube_valide(url):
 	return succes
 
 
-async def joue_url(ctx, titre, guild, url):
+async def joue_url(ctx, guild, url):
 
 	# join un channel vocal ou pas
 	co_ch_vo = False
@@ -94,7 +94,6 @@ async def joue_url(ctx, titre, guild, url):
 
 	#jouer de la musique
 	
-	await envoi(ctx, titre, "Preparation : "+str(url))
 
 	ydl_opts = {
 		'format': 'bestaudio/best',
@@ -115,8 +114,7 @@ async def joue_url(ctx, titre, guild, url):
 		
 	print('done')
 
-	text_done_dl = "Lancement de : \n"+str(url)
-	await envoi(ctx, titre, text_done_dl)
+	
 
 
 @bot.command()
@@ -127,13 +125,22 @@ async def joue(ctx, url, *, content=""):
 
 	if lien_youtube_valide(str(url)) :
 
-		await joue_url(ctx, titre, guild, url)
+		await envoi(ctx, titre, "Lancement de : \n"+str(url))
+
+		await joue_url(ctx, guild, url)
+
+		await envoi(ctx, titre, "Preparation : "+str(url))
 
 	else :
 		recherche_music = str(url)+" "+content
 		url_trouver, titreMusic = recherche_youtube.main(recherche_music)
 		url_trouver = "https://www.youtube.com"+url_trouver
-		await joue_url(ctx, titre, guild, url_trouver)
+
+		await envoi(ctx, titre, "Lancement de : ("+titreMusic+")["+url_trouver+"]")
+
+		await joue_url(ctx, guild, url_trouver)
+
+		await envoi(ctx, titre, "Preparation : ("+titreMusic+")["+url_trouver+"]")
 
 @bot.command()
 async def pause(ctx):
@@ -171,7 +178,7 @@ async def help(ctx):
 	texte += "pause\n"
 	texte += "resume\n"
 	texte += "presentation\n"
-	texte += "Version : 4.0\n"
+	texte += "Version : 5.0\n"
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
