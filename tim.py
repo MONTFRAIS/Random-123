@@ -89,11 +89,11 @@ def lien_youtube_valide(url):
 async def joue_url(ctx, guild, url):
 
 	# join un channel vocal ou pas
-	co_ch_vo = False
+	connecter_channel_vo = False
 	for x in bot.voice_clients:
 		if(x.guild == ctx.message.guild):
-			co_ch_vo = True
-	if co_ch_vo == False:
+			connecter_channel_vo = True
+	if connecter_channel_vo == False:
 		channel = ctx.message.author.voice.channel
 		player = await channel.connect()
 
@@ -121,7 +121,7 @@ async def joue_url(ctx, guild, url):
 		if file.endswith(".mp3"):
 			os.rename(file, 'song'+str(guild.id)+'.mp3')
 
-	if players[guild.id] != player:
+	if connecter_channel_vo == False :
 		players[guild.id] = player
 		
 	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'), after=lambda e: check_queue(ctx, guild))
