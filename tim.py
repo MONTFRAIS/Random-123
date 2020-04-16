@@ -13,6 +13,8 @@ api = str(os.environ.get('RIOT_KEY'))
 bot = commands.Bot(command_prefix='!')
 bot.remove_command('help')
 players = {}
+queues = {}
+player = None
 
 @bot.event
 async def on_ready():
@@ -44,9 +46,8 @@ async def envoi(ctx, titre, texte):
 		title = "**"+titre+"**"
 	)
 	#embed.set_author(name=titre)
-
-	await ctx.send(embed=embed)
 	
+	await ctx.send(embed=embed)
 '''------------------------------------------commandes normales-------------------------------------'''
 @bot.command()
 async def insulte(ctx, message):
@@ -59,8 +60,11 @@ async def insulte(ctx, message):
 	msg += "cela a été prouvé"
 	await ctx.send(msg)
 '''------------------------------------------commandes pour la musique-------------------------------------'''
-def check_queue(ctx):
-	pass
+def check_queue(id):
+	if queues[id] != []:
+		player = queues[id].pop(0)
+		players[id] = player
+		player.play()
 
 
 def lien_youtube_valide(url):
@@ -110,7 +114,8 @@ async def joue_url(ctx, guild, url):
 		if file.endswith(".mp3"):
 			os.rename(file, 'song'+str(guild.id)+'.mp3')
 
-	player.play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'))
+	player = discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3')
+	player.start()
 	players[guild.id] = player
 		
 	print('done')
@@ -130,6 +135,8 @@ async def joue(ctx, url, *, content=""):
 
 		await joue_url(ctx, guild, url)
 
+		await ctx.channel.purge(limit=1)
+
 		await envoi(ctx, titre, "Lancement de : \n"+str(url))
 
 	else :
@@ -140,6 +147,8 @@ async def joue(ctx, url, *, content=""):
 		await envoi(ctx, titre, "Preparation : ["+titreMusic+"]("+url_trouver+")")
 
 		await joue_url(ctx, guild, url_trouver)
+
+		await ctx.channel.purge(limit=1)
 
 		await envoi(ctx, titre, "Lancement de : ["+titreMusic+"]("+url_trouver+")")
 		
@@ -180,7 +189,7 @@ async def help(ctx):
 	texte += "pause\n"
 	texte += "resume\n"
 	texte += "presentation\n"
-	texte += "Version : 5.0\n"
+	texte += "Version : 6.0\n"
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
