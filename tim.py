@@ -10,6 +10,7 @@ import youtube_dl
 api = str(os.environ.get('RIOT_KEY'))
 bot = commands.Bot(command_prefix='!')
 bot.remove_command('help')
+players = {}
 
 @bot.event
 async def on_ready():
@@ -63,11 +64,20 @@ async def joue(ctx, url):
 	print('done')
 
 @bot.command()
+async def pause(ctx):
+	guild = ctx.message.guild
+	players[guild.id].pause()
+@bot.command()
+async def resume(ctx):
+	guild = ctx.message.guild
+	players[guild.id].resume()
+
+@bot.command()
 async def arrete(ctx):
-	global player
-	player = None
-	guild = ctx.message.guild.voice_client
-	await guild.disconnect()
+	guild = ctx.message.guild
+	players[guild.id].stop()
+	guild_voice = ctx.message.guild.voice_client
+	await guild_voice.disconnect()
 	os.remove('song.mp3')
 
 '''------------------------------------------commande help-------------------------------------'''
