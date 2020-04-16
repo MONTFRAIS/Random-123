@@ -121,7 +121,7 @@ async def joue_url(ctx, guild, url):
 		if file.endswith(".mp3"):
 			os.rename(file, 'song'+str(guild.id)+'.mp3')
 
-	if players[guild.id] == None:
+	if players[guild.id] != player:
 		players[guild.id] = player
 		
 	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'), after=lambda e: check_queue(ctx, guild))
