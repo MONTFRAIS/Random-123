@@ -6,4 +6,3 @@ simplejson
 youtube_dl
 PyNaCl
 html.parser
-urllib
