@@ -124,7 +124,7 @@ async def joue_url(ctx, guild, url):
 	if connecter_channel_vo == False :
 		players[guild.id] = player
 		
-	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'), after=lambda e: check_queue(ctx, guild))
+	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'), after=lambda e: await check_queue(ctx, guild))
 		
 	print('done')
 
