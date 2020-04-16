@@ -28,6 +28,7 @@ async def on_command_error(ctx, error):
 	elif isinstance(error, commands.CommandNotFound):
 		texte = "Commande Invalide ou Inexistante"
 	else:
+		print(error)
 		texte = "une ERREUR s'est produite"
 
 	'''------embed pour affichage erreur--------'''
@@ -36,7 +37,8 @@ async def on_command_error(ctx, error):
 async def envoi(ctx, titre, texte):
 	embed = discord.Embed(
 		description = texte,
-		colour = discord.Colour.blue()
+		colour = discord.Colour.blue(),
+		titre = titre
 	)
 	embed.set_author(name=titre)
 
@@ -57,13 +59,47 @@ async def insulte(ctx, message):
 def check_queue(ctx):
 	pass
 
+
+def lien_youtube_valide(url):
+	lien_valide = "https://www.youtube.com/watch?v="
+	for i in range(len(lien_valide)):
+		if url[i] != lien_valide[i]:
+			return False
+
+
+async def joue_url(ctx, url, guild):
+		#jouer de la musique
+
+	ydl_opts = {
+		'format': 'bestaudio/best',
+		'postprocessors': [{
+			'key': 'FFmpegExtractAudio',
+			'preferredcodec': 'mp3',
+			'preferredquality': '192',
+		}],
+	}
+	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+		ydl.download([url])
+	for file in os.listdir("./"):
+		if file.endswith(".mp3"):
+			os.rename(file, 'song'+str(guild.id)+'.mp3')
+
+	player.play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'))
+	players[guild.id] = player
+		
+	print('done')
+
+	text_done_dl = "Lancement de : \n"+str(url)
+	await envoi(ctx, titre, text_done_dl)
+
+
 @bot.command()
-async def joue(ctx, url):
+async def joue(ctx, url, *, content=""):
 	#variable utile dans tout la def
 	guild = ctx.message.guild
 	titre = "Music"
 
-	# join un channel vocal
+	# join un channel vocal ou pas
 	co_ch_vo = False
 	for x in bot.voice_clients:
 		if(x.guild == ctx.message.guild):
@@ -77,33 +113,15 @@ async def joue(ctx, url):
 		with os.scandir("./") as fichiers:
 			for fichier in fichiers:
 				if fichier.name == 'song'+str(guild.id)+'.mp3':
-					os.remove('song.mp3')
-	
-	
-	#jouer de la musique
+					os.remove('song'+str(guild.id)+'.mp3')
 
+	if lien_youtube_valide(str(url)):
 
-	ydl_opts = {
-        'format': 'bestaudio/best',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-	}
-	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-		ydl.download([url])
-	for file in os.listdir("./"):
-		if file.endswith(".mp3"):
-			os.rename(file, 'song'+str(guild.id)+'.mp3')
+		joue_url(ctx, url, guild)
 
-	player.play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'))
-	players[guild.id] = player
-	
-	print('done')
-
-	text_done_dl = "Lancement de : \n"+str(url)
-	await envoi(ctx, titre, text_done_dl)
+	else :
+		recherche = str(url)" "+content
+		await ctx.send(recherche)
 
 @bot.command()
 async def pause(ctx):
@@ -134,7 +152,7 @@ async def help(ctx):
 	texte += "pause\n"
 	texte += "resume\n"
 	texte += "presentation\n"
-	texte += "Version : 2.0\n"
+	texte += "Version : 3.0\n"
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
