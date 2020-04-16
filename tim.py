@@ -47,11 +47,11 @@ async def envoi(ctx, titre, texte, url=""):
 
 		await ctx.send(embed=embed)
 	else:
+		texte = "["+texte+"]("+url+")"
 		embed = discord.Embed(
 			description = texte,
 			colour = discord.Colour.blue(),
 			title = "**"+titre+"**",
-			url=url
 		)
 		#embed.set_author(name=titre)
 
