@@ -36,26 +36,17 @@ async def on_command_error(ctx, error):
 	'''------embed pour affichage erreur--------'''
 	await envoi(ctx, titre, texte)
 
-async def envoi(ctx, titre, texte, url=""):
-	if url == "":
-		embed = discord.Embed(
-			description = texte,
-			colour = discord.Colour.blue(),
-			title = "**"+titre+"**"
-		)
-		#embed.set_author(name=titre)
+async def envoi(ctx, titre, texte):
+	
+	embed = discord.Embed(
+		description = texte,
+		colour = discord.Colour.blue(),
+		title = "**"+titre+"**"
+	)
+	#embed.set_author(name=titre)
 
-		await ctx.send(embed=embed)
-	else:
-		texte = "["+texte+"]("+url+")"
-		embed = discord.Embed(
-			description = texte,
-			colour = discord.Colour.blue(),
-			title = "**"+titre+"**",
-		)
-		#embed.set_author(name=titre)
-
-		await ctx.send(embed=embed)
+	await ctx.send(embed=embed)
+	
 '''------------------------------------------commandes normales-------------------------------------'''
 @bot.command()
 async def insulte(ctx, message):
@@ -146,11 +137,11 @@ async def joue(ctx, url, *, content=""):
 		url_trouver, titreMusic = recherche_youtube.main(recherche_music)
 		url_trouver = "https://www.youtube.com"+url_trouver
 
-		await envoi(ctx, titre, "Preparation : "+titreMusic, url_trouver)
+		await envoi(ctx, titre, "Preparation : ["+titreMusic+"]("+url_trouver+")")
 
 		await joue_url(ctx, guild, url_trouver)
 
-		await envoi(ctx, titre, "Lancement de : "+titreMusic, url_trouver)
+		await envoi(ctx, titre, "Lancement de : ["+titreMusic+"]("+url_trouver+")")
 		
 
 @bot.command()
