@@ -38,9 +38,9 @@ async def envoi(ctx, titre, texte):
 	embed = discord.Embed(
 		description = texte,
 		colour = discord.Colour.blue(),
-		titre = titre
+		title = "**"+titre+"**"
 	)
-	embed.set_author(name=titre)
+	#embed.set_author(name=titre)
 
 	await ctx.send(embed=embed)
 
@@ -63,9 +63,12 @@ def check_queue(ctx):
 def lien_youtube_valide(url):
 	succes = True
 	lien_valide = "https://www.youtube.com/watch?v="
-	for i in range(len(lien_valide)):
-		if url[i] != lien_valide[i]:
-			succes = False
+	if(len(url)<len(lien_valide)):
+		succes = False
+	else:
+		for i in range(len(lien_valide)):
+			if url[i] != lien_valide[i]:
+				succes = False
 	return succes
 
 
@@ -133,11 +136,18 @@ async def pause(ctx):
 	guild = ctx.message.guild
 	if (players[guild.id] != None):
 		players[guild.id].pause()
+
 @bot.command()
 async def resume(ctx):
 	guild = ctx.message.guild
 	if (players[guild.id] != None):
 		players[guild.id].resume()
+
+@bot.command()
+async def stop(ctx):
+	guild = ctx.message.guild
+	if (players[guild.id] != None):
+		players[guild.id].stop()
 
 @bot.command()
 async def arrete(ctx):
@@ -157,7 +167,7 @@ async def help(ctx):
 	texte += "pause\n"
 	texte += "resume\n"
 	texte += "presentation\n"
-	texte += "Version : 3.0\n"
+	texte += "Version : 4.0\n"
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
