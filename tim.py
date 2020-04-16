@@ -17,7 +17,26 @@ async def on_ready():
 	await bot.change_presence(activity=discord.Game(name="!help"))
 	print("je suis pret")
 	print("Je m'appele " + str(bot.user.name))
+	
+@bot.event
+async def on_command_error(ctx, error):
+	texte = ""
+	if isinstance(error, commands.MissingRequiredArgument):
+		texte = "il manque un argument lors de ton utilisation de cette commande !!!!\n"
+		texte += "tu devrais utiliser la commande help pour savoir comment utiliser cette commande"
+	else:
+		texte = "une ERREUR s'est produite"
 
+	'''------embed pour affichage erreur--------'''
+	embed = discord.Embed(
+		description = texte,
+		colour = discord.Colour.blue()
+	)
+	embed.set_author(name='ERREUR')
+
+	await ctx.send(embed=embed)
+
+'''------------------------------------------commandes normales-------------------------------------'''
 @bot.command()
 async def insulte(ctx, message):
 	table_isultes = []
@@ -28,7 +47,10 @@ async def insulte(ctx, message):
 	msg = str(message)+"  ->  " + str(table_isultes[nb_alea])
 	msg += "cela a ete prouve"
 	await ctx.send(msg)
-'''------------------------------------------commande pour la musique-------------------------------------'''
+'''------------------------------------------commandes pour la musique-------------------------------------'''
+def check_queue(ctx):
+	pass
+
 @bot.command()
 async def joue(ctx, url):
 	global player
@@ -66,19 +88,22 @@ async def joue(ctx, url):
 @bot.command()
 async def pause(ctx):
 	guild = ctx.message.guild
-	players[guild.id].pause()
+	if (players[guild.id] != None):
+		players[guild.id].pause()
 @bot.command()
 async def resume(ctx):
 	guild = ctx.message.guild
-	players[guild.id].resume()
+	if (players[guild.id] != None):
+		players[guild.id].resume()
 
 @bot.command()
 async def arrete(ctx):
 	guild = ctx.message.guild
-	players[guild.id].stop()
-	guild_voice = ctx.message.guild.voice_client
-	await guild_voice.disconnect()
-	os.remove('song.mp3')
+	if (players[guild.id] != None):
+		players[guild.id].stop()
+		guild_voice = ctx.message.guild.voice_client
+		await guild_voice.disconnect()
+		os.remove('song.mp3')
 
 '''------------------------------------------commande help-------------------------------------'''
 @bot.command()
