@@ -61,13 +61,32 @@ def check_queue(ctx):
 
 
 def lien_youtube_valide(url):
+	succes = True
 	lien_valide = "https://www.youtube.com/watch?v="
 	for i in range(len(lien_valide)):
 		if url[i] != lien_valide[i]:
-			return False
+			succes = False
+	return succes
 
 
-async def joue_url(ctx, player, guild, titre, url):
+async def joue_url(ctx, titre, guild, url):
+
+	# join un channel vocal ou pas
+	co_ch_vo = False
+	for x in bot.voice_clients:
+		if(x.guild == ctx.message.guild):
+			co_ch_vo = True
+	if co_ch_vo == False:
+		channel = ctx.message.author.voice.channel
+		player = await channel.connect()
+
+		#teste si fichier music deja existant si oui suppression
+
+		with os.scandir("./") as fichiers:
+			for fichier in fichiers:
+				if fichier.name == 'song'+str(guild.id)+'.mp3':
+					os.remove('song'+str(guild.id)+'.mp3')
+
 	#jouer de la musique
 	
 	await envoi(ctx, titre, "Preparation : "+str(url))
@@ -101,25 +120,9 @@ async def joue(ctx, url, *, content=""):
 	guild = ctx.message.guild
 	titre = "Music"
 
-	# join un channel vocal ou pas
-	co_ch_vo = False
-	for x in bot.voice_clients:
-		if(x.guild == ctx.message.guild):
-			co_ch_vo = True
-	if co_ch_vo == False:
-		channel = ctx.message.author.voice.channel
-		player = await channel.connect()
+	if lien_youtube_valide(str(url)) :
 
-		#teste si fichier music deja existant si oui suppression
-
-		with os.scandir("./") as fichiers:
-			for fichier in fichiers:
-				if fichier.name == 'song'+str(guild.id)+'.mp3':
-					os.remove('song'+str(guild.id)+'.mp3')
-
-	if lien_youtube_valide(str(url)):
-
-		joue_url(ctx, player, guild, titre, url)
+		joue_url(ctx, titre, guild, url)
 
 	else :
 		recherche = str(url)+" "+content
