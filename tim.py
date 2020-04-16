@@ -6,6 +6,8 @@ import asyncio
 import os
 from random import randint
 import youtube_dl
+#Code fait pour l'occasion
+import recherche_youtube
 
 api = str(os.environ.get('RIOT_KEY'))
 bot = commands.Bot(command_prefix='!')
@@ -53,7 +55,7 @@ async def insulte(ctx, message):
 		for insulte in f.readlines():
 			table_isultes.append(insulte)
 	msg = str(message)+"  ->  " + str(table_isultes[nb_alea])
-	msg += "cela a ete prouve"
+	msg += "cela a été prouvé"
 	await ctx.send(msg)
 '''------------------------------------------commandes pour la musique-------------------------------------'''
 def check_queue(ctx):
@@ -128,8 +130,10 @@ async def joue(ctx, url, *, content=""):
 		await joue_url(ctx, titre, guild, url)
 
 	else :
-		recherche = str(url)+" "+content
-		await ctx.send(recherche)
+		recherche_music = str(url)+" "+content
+		url_trouver, titreMusic = recherche_youtube.main(recherche_music)
+		url_trouver = "https://www.youtube.com"+url_trouver
+		await joue_url(ctx, titre, guild, url_trouver)
 
 @bot.command()
 async def pause(ctx):
