@@ -60,18 +60,18 @@ async def insulte(ctx, message):
 	msg += "cela a été prouvé"
 	await ctx.send(msg)
 '''------------------------------------------commandes pour la musique-------------------------------------'''
-async def check_queue(ctx, guild):
+def check_queue(ctx, guild):
 	i = guild.id
 	if queues[i] != []:
 		url = queues[i].pop(0)
-		await joue_url(ctx, guild, url)
+		joue_url(ctx, guild, url)
 		
-async def add_queue(ctx, guild, url):
+def add_queue(ctx, guild, url):
 	if guild.id in queues:
 		queues[guild.id].append(url)
 	else:
 		queues[guild.id] = [url]
-		await joue_url(ctx, guild, url)
+		joue_url(ctx, guild, url)
 
 
 def lien_youtube_valide(url):
@@ -86,7 +86,7 @@ def lien_youtube_valide(url):
 	return succes
 
 
-async def joue_url(ctx, guild, url):
+def joue_url(ctx, guild, url):
 
 	# join un channel vocal ou pas
 	connecter_channel_vo = False
@@ -124,7 +124,7 @@ async def joue_url(ctx, guild, url):
 	if connecter_channel_vo == False :
 		players[guild.id] = player
 		
-	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'), after=lambda e: await check_queue(ctx, guild))
+	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'), after=lambda e: check_queue(ctx, guild))
 		
 	print('done')
 
@@ -141,7 +141,7 @@ async def joue(ctx, url, *, content=""):
 
 		await envoi(ctx, titre, "Preparation : "+str(url))
 
-		await add_queue(ctx, guild, url)
+		add_queue(ctx, guild, url)
 
 		await ctx.channel.purge(limit=1)
 
@@ -154,7 +154,7 @@ async def joue(ctx, url, *, content=""):
 
 		await envoi(ctx, titre, "Preparation : ["+titreMusic+"]("+url_trouver+")")
 
-		await add_queue(ctx, guild, url_trouver)
+		add_queue(ctx, guild, url_trouver)
 
 		await ctx.channel.purge(limit=1)
 
