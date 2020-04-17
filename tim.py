@@ -86,12 +86,24 @@ def add_queue(ctx, guild, url):
 		queues[guild.id] = [url]
 		queues_titre[guild.id] = [recherche_youtube_titre.main(url)]
 		joue_url(ctx, guild, url)
-
+def non_playlist(url):
+	succes = False
+	block_playlist = "list"
+	lien_valide = "https://www.youtube.com/watch?v="
+	if(len(url)<len(lien_valide)):
+		succes = True
+	else:
+		#blocage des playlist par detection de la presence du mot "list" dans l'url
+		for j in range(len(url)):
+			if url[j] == block_playlist[0]:
+				succes = True
+				for d in range(len(block_playlist)):
+					if d != 0 and url[j+d] != block_playlist[d]:
+						succes =False
+	return succes
 
 def lien_youtube_valide(url):
 	succes = True
-	suite = False
-	block_playlist = "list"
 	lien_valide = "https://www.youtube.com/watch?v="
 	if(len(url)<len(lien_valide)):
 		succes = False
@@ -99,15 +111,6 @@ def lien_youtube_valide(url):
 		for i in range(len(lien_valide)):
 			if url[i] != lien_valide[i]:
 				succes = False
-		#blocage des playlist par detection de la presence du mot "list" dans l'url
-		for j in range(len(url)):
-			if url[j] == block_playlist[0]:
-				suite = True
-				for d in range(len(block_playlist)):
-					if d != 0 and url[j+d] != block_playlist[d]:
-						suite =False
-		if suite == True:
-			succes = False
 	return succes
 	
 
@@ -167,6 +170,10 @@ async def joue(ctx, url, *, content=""):
 
 	if lien_youtube_valide(str(url)) :
 
+		if non_playlist(url) == True:
+			url=suppr_apartir(url, "&")
+			await ctx.send("C'est une playliste seul la première a été récuperé")
+
 		await envoi(ctx, titre, "Preparation : "+str(recherche_youtube_titre.main(url)))
 
 		await join(ctx, guild)
@@ -182,7 +189,7 @@ async def joue(ctx, url, *, content=""):
 		url_trouver, titreMusic = recherche_youtube.main(recherche_music)
 		url_trouver = "https://www.youtube.com"+url_trouver
 
-		if lien_youtube_valide(url_trouver) == False:
+		if non_playlist(url_trouver) == True:
 			url_trouver=suppr_apartir(url_trouver, "&")
 			await ctx.send("C'est une playliste seul la première a été récuperé")
 
