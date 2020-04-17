@@ -97,9 +97,10 @@ def lien_youtube_valide(url):
 			if url[j] == block_playlist[0]:
 				suite = True
 				for d in range(len(block_playlist)):
-					if d != 0 and url[j+d] == block_playlist[d]:
+					if d != 0 and url[j+d] != block_playlist[d]:
 						suite =False
-
+		if suite == True:
+			succes = False
 	return succes
 	
 
@@ -248,7 +249,7 @@ async def help(ctx):
 	texte += "purgeQueue\n"
 	texte += "presentation\n"
 	texte += "---------------------\n"
-	texte += "Version : 7.0\n"
+	texte += "Version : 7.5\n"
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
