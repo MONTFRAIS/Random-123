@@ -62,6 +62,13 @@ async def insulte(ctx, message):
 	msg += "cela a été prouvé"
 	await ctx.send(msg)
 '''------------------------------------------commandes pour la musique-------------------------------------'''
+def suppr_apartir(txt, c):
+	tmp =""
+	for i in txt:
+		tmp+=i
+		if i == c :
+			return tmp
+	return tmp
 def check_queue(ctx, guild):
 	i = guild.id
 	if queues[i] != []:
@@ -174,6 +181,10 @@ async def joue(ctx, url, *, content=""):
 		recherche_music = str(url)+" "+content
 		url_trouver, titreMusic = recherche_youtube.main(recherche_music)
 		url_trouver = "https://www.youtube.com"+url_trouver
+
+		if lien_youtube_valide(url_trouver) == False:
+			url_trouver=suppr_apartir(url_trouver, "&")
+			await ctx.send("C'est une playliste seul la première a été récuperé")
 
 		await envoi(ctx, titre, "Preparation : ["+titreMusic+"]("+url_trouver+")")
 
