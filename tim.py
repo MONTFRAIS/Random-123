@@ -76,13 +76,16 @@ def check_queue(ctx, guild):
 
 		queues[i].pop(0)
 		queues_titre[i].pop(0)
-		url = queues[i][0]
-		titre = queues_titre[i][0]
 
-		#son suivant
-		players[i].play(discord.FFmpegPCMAudio('./music_bot_systeme/suiv.mp3'), after=lambda e: players[i].stop())
+		if queues[i] != []
+			url = queues[i][0]
+			titre = queues_titre[i][0]
 
-		joue_url(ctx, guild, url)
+			#son suivant
+			players[i].play(discord.FFmpegPCMAudio('./music_bot_systeme/suiv.mp3'), after=lambda e: players[i].stop())
+
+			joue_url(ctx, guild, url)
+
 		
 def add_queue(ctx, guild, url):
 	if guild.id in queues and queues[guild.id] != []:
