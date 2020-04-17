@@ -8,6 +8,7 @@ from random import randint
 import youtube_dl
 #Code fait pour l'occasion
 import recherche_youtube
+import recherche_youtube_titre
 
 api = str(os.environ.get('RIOT_KEY'))
 bot = commands.Bot(command_prefix='!')
@@ -67,7 +68,7 @@ def check_queue(ctx, guild):
 		joue_url(ctx, guild, url)
 		
 def add_queue(ctx, guild, url):
-	if guild.id in queues:
+	if guild.id in queues and queues[guild.id] != []:
 		queues[guild.id].append(url)
 	else:
 		queues[guild.id] = [url]
@@ -174,12 +175,19 @@ async def resume(ctx):
 	guild = ctx.message.guild
 	if (players[guild.id] != None):
 		players[guild.id].resume()
-
 @bot.command()
-async def stop(ctx):
+async def next(ctx):
 	guild = ctx.message.guild
 	if (players[guild.id] != None):
 		players[guild.id].stop()
+		check_queue(ctx, guild)
+
+@bot.command()
+async def purgeQueue(ctx):
+	guild = ctx.message.guild
+	if (players[guild.id] != None):
+		players[guild.id].stop()
+		queues[guild.id] = []
 
 @bot.command()
 async def arrete(ctx):
@@ -188,18 +196,23 @@ async def arrete(ctx):
 		players[guild.id].stop()
 		guild_voice = ctx.message.guild.voice_client
 		await guild_voice.disconnect()
+		queues[guild.id] = []
 		os.remove('song'+str(guild.id)+'.mp3')
 
 '''------------------------------------------commande help-------------------------------------'''
 @bot.command()
 async def help(ctx):
-	texte = "insulte\n"
+	texte = "---------------------\n"
+	texte += "insulte\n"
 	texte += "joue\n"
 	texte += "arrete\n"
 	texte += "pause\n"
 	texte += "resume\n"
+	texte += "next\n"
+	texte += "purgeQueue\n"
 	texte += "presentation\n"
-	texte += "Version : 6.0\n"
+	texte += "---------------------\n"
+	texte += "Version : 7.0\n"
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
