@@ -77,7 +77,7 @@ def check_queue(ctx, guild):
 		queues[i].pop(0)
 		queues_titre[i].pop(0)
 
-		if queues[i] != []
+		if queues[i] != []:
 			url = queues[i][0]
 			titre = queues_titre[i][0]
 
