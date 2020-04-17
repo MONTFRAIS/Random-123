@@ -67,8 +67,8 @@ def check_queue(ctx, guild):
 	if queues[i] != []:
 		queues[i].pop(0)
 		queues_titre[i].pop(0)
-		url = queues[i].get(0)
-		titre = queues_titre[i].get(0)
+		url = queues[i][0]
+		titre = queues_titre[i][0]
 		joue_url(ctx, guild, url)
 		
 def add_queue(ctx, guild, url):
@@ -195,9 +195,10 @@ async def next(ctx):
 
 @bot.command()
 async def queue(ctx):
+	guild = ctx.message.guild
 	texte = ""
 	titre = "Music Queue"
-	for titre in queues_titre:
+	for titre in queues_titre[guild.id]:
 		texte += titre+"\n"
 	await envoi(ctx, titre, texte)
 
