@@ -191,16 +191,16 @@ async def next(ctx):
 	guild = ctx.message.guild
 	if (players[guild.id] != None):
 		players[guild.id].stop()
-		check_queue(ctx, guild)
+		#check_queue(ctx, guild)
 
 @bot.command()
 async def queue(ctx):
 	guild = ctx.message.guild
 	texte = ""
-	titre = "Music Queue"
+	titreM = "Music Queue"
 	for titre in queues_titre[guild.id]:
 		texte += titre+"\n"
-	await envoi(ctx, titre, texte)
+	await envoi(ctx, titreM, texte)
 
 @bot.command()
 async def purgeQueue(ctx):
