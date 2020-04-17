@@ -72,7 +72,7 @@ def add_queue(ctx, guild, url):
 		queues[guild.id].append(url)
 	else:
 		queues[guild.id] = [url]
-		joue_url(ctx, guild, url)
+		check_queue(ctx, guild)
 
 
 def lien_youtube_valide(url):
