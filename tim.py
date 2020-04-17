@@ -80,7 +80,7 @@ def check_queue(ctx, guild):
 		titre = queues_titre[i][0]
 
 		#son suivant
-		players[guild.id].play(discord.FFmpegPCMAudio('./music_bot_systeme/suivant.mp3'))
+		players[guild.id].play(discord.FFmpegPCMAudio('./music_bot_systeme/suiv.mp3'))
 		players[i].stop()
 
 		joue_url(ctx, guild, url)
