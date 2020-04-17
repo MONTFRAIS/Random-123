@@ -15,6 +15,7 @@ bot = commands.Bot(command_prefix='!')
 bot.remove_command('help')
 players = {}
 queues = {}
+queues_titre = {}
 player = None
 
 @bot.event
@@ -65,14 +66,17 @@ def check_queue(ctx, guild):
 	i = guild.id
 	if queues[i] != []:
 		url = queues[i].pop(0)
+		titre = queues_titre[i].pop(0)
 		joue_url(ctx, guild, url)
 		
 def add_queue(ctx, guild, url):
 	if guild.id in queues and queues[guild.id] != []:
 		queues[guild.id].append(url)
+		queues_titre[guild.id].append(recherche_youtube_titre.main(url))
 	else:
 		queues[guild.id] = [url]
-		check_queue(ctx, guild)
+		queues_titre[guild.id] = [recherche_youtube_titre.main(url)]
+		joue_url(ctx, guild, url)
 
 
 def lien_youtube_valide(url):
@@ -183,11 +187,20 @@ async def next(ctx):
 		check_queue(ctx, guild)
 
 @bot.command()
+async def queue(ctx):
+	texte = ""
+	titre = "Music Queue"
+	for titre in queues_title:
+		texte += titre+"\n"
+	await envoi(ctx, titre, texte)
+
+@bot.command()
 async def purgeQueue(ctx):
 	guild = ctx.message.guild
 	if (players[guild.id] != None):
 		players[guild.id].stop()
 		queues[guild.id] = []
+		queues_titre[guild.id] = []
 
 @bot.command()
 async def arrete(ctx):
@@ -197,6 +210,7 @@ async def arrete(ctx):
 		guild_voice = ctx.message.guild.voice_client
 		await guild_voice.disconnect()
 		queues[guild.id] = []
+		queues_titre[guild.id] = []
 		os.remove('song'+str(guild.id)+'.mp3')
 
 '''------------------------------------------commande help-------------------------------------'''
