@@ -138,7 +138,7 @@ async def joue(ctx, url, *, content=""):
 
 	if lien_youtube_valide(str(url)) :
 
-		await envoi(ctx, titre, "Preparation : "+str(url))
+		await envoi(ctx, titre, "Preparation : "+str(recherche_youtube_titre.main(url)))
 
 		await join(ctx, guild)
 
@@ -146,7 +146,7 @@ async def joue(ctx, url, *, content=""):
 
 		await ctx.channel.purge(limit=1)
 
-		await envoi(ctx, titre, "Lancement de : \n"+str(url))
+		await envoi(ctx, titre, "Lancement de : \n"+str(recherche_youtube_titre.main(url)))
 
 	else :
 		recherche_music = str(url)+" "+content
