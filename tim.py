@@ -69,6 +69,7 @@ def suppr_apartir(txt, c):
 		if i == c :
 			return tmp
 	return tmp
+
 def check_queue(ctx, guild):
 	i = guild.id
 	if queues[i] != []:
@@ -94,20 +95,20 @@ def add_queue(ctx, guild, url):
 		joue_url(ctx, guild, url)
 
 def non_playlist(url):
-	succes = False
-	block_playlist = "list"
-	lien_valide = "https://www.youtube.com/watch?v="
-	if(len(url)<len(lien_valide)):
-		succes = True
-	else:
-		#blocage des playlist par detection de la presence du mot "list" dans l'url
-		for j in range(len(url)):
-			if url[j] == block_playlist[0]:
-				succes = True
-				for d in range(len(block_playlist)):
-					if d != 0 and url[j+d] != block_playlist[d]:
-						succes =False
-	return succes
+    succes = False
+    block_playlist = "list"
+    #blocage des playlist par detection de la presence du mot "list" dans l'url
+    for i in range(len(url)):
+        nb_suite = 0
+        if url[i] == block_playlist[0]:
+            nb_suite +=1
+            for j in range(len(block_playlist)):
+                if i+j < len(url):
+                    if url[i+j] == block_playlist[j] and j != 0:
+                        nb_suite +=1
+        if nb_suite == len(block_playlist):
+            succes = True
+    return succes
 
 def lien_youtube_valide(url):
 	succes = True
@@ -273,7 +274,7 @@ async def help(ctx):
 	texte += "purgeQueue\n"
 	texte += "presentation\n"
 	texte += "---------------------\n"
-	texte += "Version : 7.5\n"
+	texte += "Version : 8.0\n"
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
