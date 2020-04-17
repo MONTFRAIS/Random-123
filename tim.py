@@ -65,8 +65,10 @@ async def insulte(ctx, message):
 def check_queue(ctx, guild):
 	i = guild.id
 	if queues[i] != []:
-		url = queues[i].pop(0)
-		titre = queues_titre[i].pop(0)
+		queues[i].pop(0)
+		queues_titre[i].pop(0)
+		url = queues[i].get(0)
+		titre = queues_titre[i].get(0)
 		joue_url(ctx, guild, url)
 		
 def add_queue(ctx, guild, url):
@@ -92,6 +94,11 @@ def lien_youtube_valide(url):
 	
 
 def joue_url(ctx, guild, url):
+	#suppr ancien fichier
+	with os.scandir("./") as fichiers:
+		for fichier in fichiers:
+			if fichier.name == 'song'+str(guild.id)+'.mp3':
+				os.remove('song'+str(guild.id)+'.mp3')
 
 	#jouer de la musique
 	
@@ -190,7 +197,7 @@ async def next(ctx):
 async def queue(ctx):
 	texte = ""
 	titre = "Music Queue"
-	for titre in queues_title:
+	for titre in queues_titre:
 		texte += titre+"\n"
 	await envoi(ctx, titre, texte)
 
