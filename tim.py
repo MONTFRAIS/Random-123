@@ -72,10 +72,16 @@ def suppr_apartir(txt, c):
 def check_queue(ctx, guild):
 	i = guild.id
 	if queues[i] != []:
+
 		queues[i].pop(0)
 		queues_titre[i].pop(0)
 		url = queues[i][0]
 		titre = queues_titre[i][0]
+
+		#son suivant
+		players[guild.id].play(discord.FFmpegPCMAudio('./music_bot_systeme/suivant.mp3'))
+		players[i].stop()
+
 		joue_url(ctx, guild, url)
 		
 def add_queue(ctx, guild, url):
@@ -86,6 +92,7 @@ def add_queue(ctx, guild, url):
 		queues[guild.id] = [url]
 		queues_titre[guild.id] = [recherche_youtube_titre.main(url)]
 		joue_url(ctx, guild, url)
+
 def non_playlist(url):
 	succes = False
 	block_playlist = "list"
@@ -220,7 +227,6 @@ async def next(ctx):
 	guild = ctx.message.guild
 	if (players[guild.id] != None):
 		players[guild.id].stop()
-		#check_queue(ctx, guild)
 
 @bot.command()
 async def queue(ctx):
