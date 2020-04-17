@@ -83,6 +83,8 @@ def add_queue(ctx, guild, url):
 
 def lien_youtube_valide(url):
 	succes = True
+	suite = False
+	block_playlist = "list"
 	lien_valide = "https://www.youtube.com/watch?v="
 	if(len(url)<len(lien_valide)):
 		succes = False
@@ -90,6 +92,14 @@ def lien_youtube_valide(url):
 		for i in range(len(lien_valide)):
 			if url[i] != lien_valide[i]:
 				succes = False
+		#blocage des playlist par detection de la presence du mot "list" dans l'url
+		for j in range(len(url)):
+			if url[j] == block_playlist[0]:
+				suite = True
+				for d in range(len(block_playlist)):
+					if d != 0 and url[j+d] == block_playlist[d]:
+						suite =False
+
 	return succes
 	
 
@@ -220,6 +230,10 @@ async def arrete(ctx):
 		queues[guild.id] = []
 		queues_titre[guild.id] = []
 		os.remove('song'+str(guild.id)+'.mp3')
+		with os.scandir("./") as fichiers:
+			for fichier in fichiers:
+				if fichier.endswith(".mp3"):
+					os.remove(fichier.name)
 
 '''------------------------------------------commande help-------------------------------------'''
 @bot.command()
