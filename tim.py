@@ -256,10 +256,9 @@ async def arrete(ctx):
 		queues[guild.id] = []
 		queues_titre[guild.id] = []
 		os.remove('song'+str(guild.id)+'.mp3')
-		with os.scandir("./") as fichiers:
-			for fichier in fichiers:
-				if fichier.endswith(".mp3"):
-					os.remove(fichier.name)
+		for fichier in os.listdir("./"):
+			if fichier.endswith(".mp3"):
+				os.remove(fichier.name)
 
 '''------------------------------------------commande help-------------------------------------'''
 @bot.command()
