@@ -135,6 +135,7 @@ def joue_url(ctx, guild, url):
 	
 
 	ydl_opts = {
+		'audioformat' : "mp3",
 		'format': 'bestaudio/best',
 		'postprocessors': [{
 			'key': 'FFmpegExtractAudio',
