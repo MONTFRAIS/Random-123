@@ -112,7 +112,7 @@ def modif_fichiers_att(id):
 			if fichier.name == 'song'+str(id)+'__0__.mp3':
 				os.remove('song'+str(id)+'__0__.mp3')
 
-	for nb_fichier in len(fichier_music_att[id]):
+	for nb_fichier in range(len(fichier_music_att[id])):
 
 		nv_nom = 'song'+str(id)+'__'+str(nb_fichier - 1)+'__.mp3'
 
