@@ -105,7 +105,6 @@ def add_queue(ctx, guild, url):
 		joue_url(ctx, guild, url, "prems")
 		
 def modif_fichiers_att(id):
-	fichier_music_att[id].pop(0)
 
 	with os.scandir("./") as fichiers:
 		for fichier in fichiers:
@@ -140,7 +139,7 @@ def cherche_mot(txt, mot):
 	return succes
 
 def check_musique_suiv():
-	musique_suiv = '__1__.mp3'
+	musique_suiv = '__0__.mp3'
 	with os.scandir("./") as fichiers:
 		for fichier in fichiers:
 			succes = cherche_mot(fichier.name, musique_suiv)
@@ -196,9 +195,7 @@ def joue_url(ctx, guild, url, num="ok"):
 	if check_musique_suiv() == False:
 		telecharge_musique(url, guild)
 	else :
-		for file in os.listdir("./"):
-			if file.name == 'song'+str(guild.id)+'__1__.mp3':
-				os.rename(file, 'song'+str(guild.id)+'__0__.mp3')	
+		print('suivant lancer --------------->')
 
 		
 	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'__0__.mp3'), after=lambda e: check_queue(ctx, guild))
