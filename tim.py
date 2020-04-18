@@ -128,7 +128,7 @@ def check_musique_suiv():
 def renom_mus(guild, nb):
 	for file in os.listdir("./"):
 		if file.endswith(".mp3"):
-			os.rename(file, 'song'+str(guild.id)+'__'+nb+'__.mp3')	
+			os.rename(file, 'song'+str(guild.id)+'__'+str(nb)+'__.mp3')	
 
 def non_playlist(url):
 	succes = False
