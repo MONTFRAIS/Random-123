@@ -70,6 +70,15 @@ def suppr_apartir(txt, c):
 		if i == c :
 			return tmp
 	return tmp
+def suppr_apartir_reverse(txt, c):
+	tmp = ""
+	i = len(txt)
+	while (i > 0):
+		if txt[i] == c:
+			return tmp
+		tmp += txt[i]
+		i-=1 
+	return tmp
 
 def check_queue(ctx, guild):
 	i = guild.id
@@ -168,6 +177,11 @@ def lien_youtube_valide(url):
 	return succes
 
 def telecharge_musique(url, guild, nb=0):
+
+	titre = str(recherche_youtube_titre.main(url))
+
+	nom_fichier = titre"-"+str(suppr_apartir_reverse(url, "="))
+
 	ydl_opts = {
 		'audioformat' : "mp3",
 		'format': 'bestaudio/best',
@@ -180,7 +194,7 @@ def telecharge_musique(url, guild, nb=0):
 	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
 		ydl.download([url])
 	for file in os.listdir("./"):
-		if file.endswith(".mp3"):
+		if file.name == nom_fichier:
 			os.rename(file, 'song'+str(guild.id)+'nb'+str(nb)+'nb.mp3')	
 
 def joue_url(ctx, guild, url, num="ok"):
