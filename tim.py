@@ -94,13 +94,13 @@ def add_queue(ctx, guild, url):
 	if guild.id in queues and queues[guild.id] != []:
 		queues[guild.id].append(url)
 		queues_titre[guild.id].append(recherche_youtube_titre.main(url))
-		fichier_music_att[guild.id].append('song'+str(guild.id)+'__'+str(len(queues[guild.id]) - 1)+'__.mp3')
+		fichier_music_att[guild.id].append('song'+str(guild.id)+'nb'+str(len(queues[guild.id]) - 1)+'nb.mp3')
 
 		telecharge_musique(url, guild, len(queues[guild.id]) - 1)
 	else:
 		queues[guild.id] = [url]
 		queues_titre[guild.id] = [recherche_youtube_titre.main(url)]
-		fichier_music_att[guild.id] = ['song'+str(guild.id)+'__'+str(len(queues[guild.id]) - 1)+'__.mp3']
+		fichier_music_att[guild.id] = ['song'+str(guild.id)+'nb'+str(len(queues[guild.id]) - 1)+'nb.mp3']
 
 		joue_url(ctx, guild, url, "prems")
 		
@@ -108,12 +108,12 @@ def modif_fichiers_att(id):
 
 	with os.scandir("./") as fichiers:
 		for fichier in fichiers:
-			if fichier.name == 'song'+str(id)+'__0__.mp3':
-				os.remove('song'+str(id)+'__0__.mp3')
+			if fichier.name == 'song'+str(id)+'nb0nb.mp3':
+				os.remove('song'+str(id)+'nb0nb.mp3')
 
 	for nb_fichier in range(len(fichier_music_att[id])):
 
-		nv_nom = 'song'+str(id)+'__'+str(nb_fichier - 1)+'__.mp3'
+		nv_nom = 'song'+str(id)+'nb'+str(nb_fichier - 1)+'nb.mp3'
 
 		with os.scandir("./") as fichiers:
 			for fichier in fichiers:
@@ -139,7 +139,7 @@ def cherche_mot(txt, mot):
 	return succes
 
 def check_musique_suiv():
-	musique_suiv = '__0__.mp3'
+	musique_suiv = 'nb0nb.mp3'
 	with os.scandir("./") as fichiers:
 		for fichier in fichiers:
 			succes = cherche_mot(fichier.name, musique_suiv)
@@ -181,15 +181,15 @@ def telecharge_musique(url, guild, nb=0):
 		ydl.download([url])
 	for file in os.listdir("./"):
 		if file.endswith(".mp3"):
-			os.rename(file, 'song'+str(guild.id)+'__'+str(nb)+'__.mp3')	
+			os.rename(file, 'song'+str(guild.id)+'nb'+str(nb)+'nb.mp3')	
 
 def joue_url(ctx, guild, url, num="ok"):
 	#suppr ancien fichier
 	if num == "prems":
 		with os.scandir("./") as fichiers:
 			for fichier in fichiers:
-				if fichier.name == 'song'+str(guild.id)+'__0__.mp3':
-					os.remove('song'+str(guild.id)+'__0__.mp3')
+				if fichier.name == 'song'+str(guild.id)+'nb0nb.mp3':
+					os.remove('song'+str(guild.id)+'nb0nb.mp3')
 
 	#jouer de la musique / dl si pas deja dl en avance
 	if check_musique_suiv() == False:
@@ -197,7 +197,7 @@ def joue_url(ctx, guild, url, num="ok"):
 	else :
 		print('suivant lancer --------------->')
 
-	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'__0__.mp3'), after=lambda e: check_queue(ctx, guild))
+	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'nb0nb.mp3'), after=lambda e: check_queue(ctx, guild))
 		
 	print('done')
 
