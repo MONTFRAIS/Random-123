@@ -297,7 +297,7 @@ async def fichier(ctx):
 	titreM = "Music Queue"
 	with os.scandir("./") as fichiers:
 			for fichier in fichiers:
-				texte += fichier.name
+				texte += fichier.name+"\n"
 	await envoi(ctx, titreM, texte)
 
 @bot.command()
