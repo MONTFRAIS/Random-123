@@ -85,7 +85,7 @@ def check_queue(ctx, guild):
 			modif_fichiers_att(i)
 
 			#son suivant
-			players[i].play(discord.FFmpegPCMAudio('./music_bot_systeme/suiv.mp3'), after=lambda e: players[i].stop())
+			#players[i].play(discord.FFmpegPCMAudio('./music_bot_systeme/suiv.mp3'), after=lambda e: players[i].stop())
 
 			joue_url(ctx, guild, url)
 
@@ -197,7 +197,6 @@ def joue_url(ctx, guild, url, num="ok"):
 	else :
 		print('suivant lancer --------------->')
 
-	players[guild.id].stop()
 	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'__0__.mp3'), after=lambda e: check_queue(ctx, guild))
 		
 	print('done')
@@ -298,7 +297,7 @@ async def fichier(ctx):
 	titreM = "Music Queue"
 	with os.scandir("./") as fichiers:
 			for fichier in fichiers:
-				texte += fichier.nom
+				texte += fichier.name
 	await envoi(ctx, titreM, texte)
 
 @bot.command()
