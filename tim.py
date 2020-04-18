@@ -180,7 +180,7 @@ def telecharge_musique(url, guild, nb=0):
 
 	titre = str(recherche_youtube_titre.main(url))
 
-	nom_fichier = titre"-"+str(suppr_apartir_reverse(url, "="))
+	nom_fichier = titre+"-"+str(suppr_apartir_reverse(url, "="))
 
 	ydl_opts = {
 		'audioformat' : "mp3",
