@@ -81,6 +81,11 @@ def check_queue(ctx, guild):
 			url = queues[i][0]
 			titre = queues_titre[i][0]
 
+			#telecharge son suivant
+			if queues[i][1] != []:
+				url_2 = queues[i][1]
+				telecharge_musique(url_2, guild, 2)
+
 			#son suivant
 			players[i].play(discord.FFmpegPCMAudio('./music_bot_systeme/suiv.mp3'), after=lambda e: players[i].stop())
 
@@ -95,21 +100,41 @@ def add_queue(ctx, guild, url):
 		queues[guild.id] = [url]
 		queues_titre[guild.id] = [recherche_youtube_titre.main(url)]
 		joue_url(ctx, guild, url)
+		
+def cherche_mot(txt, mot):
+	succes = False
+	for i in range(len(txt)):
+		nb_suite = 0
+		if txt[i] == mot[0]:
+			nb_suite +=1
+			for j in range(len(mot)):
+				if i+j < len(txt):
+					if txt[i+j] == mot[j] and j != 0:
+						nb_suite +=1
+		if nb_suite == len(mot):
+			succes = True
+	return succes
+
+def check_musique_suiv():
+	musique_suiv = '__2__.mp3'
+	with os.scandir("./") as fichiers:
+		for fichier in fichiers:
+			succes = cherche_mot(fichier.name)
+			if succes == True:
+				return True
+	return False
+
+
+def renom_mus(guild, nb)
+	for file in os.listdir("./"):
+		if file.endswith(".mp3"):
+			os.rename(file, 'song'+str(guild.id)+'__'+nb+'__.mp3')	
 
 def non_playlist(url):
     succes = False
     block_playlist = "list"
     #blocage des playlist par detection de la presence du mot "list" dans l'url
-    for i in range(len(url)):
-        nb_suite = 0
-        if url[i] == block_playlist[0]:
-            nb_suite +=1
-            for j in range(len(block_playlist)):
-                if i+j < len(url):
-                    if url[i+j] == block_playlist[j] and j != 0:
-                        nb_suite +=1
-        if nb_suite == len(block_playlist):
-            succes = True
+	succes = cherche_mot(url, block_playlist)
     return succes
 
 def lien_youtube_valide(url):
@@ -122,18 +147,8 @@ def lien_youtube_valide(url):
 			if url[i] != lien_valide[i]:
 				succes = False
 	return succes
-	
 
-def joue_url(ctx, guild, url):
-	#suppr ancien fichier
-	with os.scandir("./") as fichiers:
-		for fichier in fichiers:
-			if fichier.name == 'song'+str(guild.id)+'.mp3':
-				os.remove('song'+str(guild.id)+'.mp3')
-
-	#jouer de la musique
-	
-
+def telecharge_musique(url, guild, nb=1):
 	ydl_opts = {
 		'audioformat' : "mp3",
 		'format': 'bestaudio/best',
@@ -145,9 +160,21 @@ def joue_url(ctx, guild, url):
 	}
 	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
 		ydl.download([url])
-	for file in os.listdir("./"):
-		if file.endswith(".mp3"):
-			os.rename(file, 'song'+str(guild.id)+'.mp3')
+	renom_mus(guild,  nb)	
+
+def joue_url(ctx, guild, url):
+	#suppr ancien fichier
+	with os.scandir("./") as fichiers:
+		for fichier in fichiers:
+			if fichier.name == 'song'+str(guild.id)+'.mp3':
+				os.remove('song'+str(guild.id)+'.mp3')
+
+	#jouer de la musique / dl si pas deja dl en avance
+	if check_musique_suiv() == False:
+		telecharge_musique(url, guild)
+	else :
+		renom_mus(guild, 1)
+
 		
 	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'), after=lambda e: check_queue(ctx, guild))
 		
