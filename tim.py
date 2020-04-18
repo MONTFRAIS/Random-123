@@ -119,23 +119,23 @@ def check_musique_suiv():
 	musique_suiv = '__2__.mp3'
 	with os.scandir("./") as fichiers:
 		for fichier in fichiers:
-			succes = cherche_mot(fichier.name)
+			succes = cherche_mot(fichier.name, musique_suiv)
 			if succes == True:
 				return True
 	return False
 
 
-def renom_mus(guild, nb)
+def renom_mus(guild, nb):
 	for file in os.listdir("./"):
 		if file.endswith(".mp3"):
 			os.rename(file, 'song'+str(guild.id)+'__'+nb+'__.mp3')	
 
 def non_playlist(url):
-    succes = False
-    block_playlist = "list"
-    #blocage des playlist par detection de la presence du mot "list" dans l'url
+	succes = False
+	block_playlist = "list"
+	#blocage des playlist par detection de la presence du mot "list" dans l'url
 	succes = cherche_mot(url, block_playlist)
-    return succes
+	return succes
 
 def lien_youtube_valide(url):
 	succes = True
