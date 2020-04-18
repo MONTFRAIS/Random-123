@@ -292,6 +292,16 @@ async def queue(ctx):
 	await envoi(ctx, titreM, texte)
 
 @bot.command()
+async def fichier(ctx):
+	guild = ctx.message.guild
+	texte = ""
+	titreM = "Music Queue"
+	with os.scandir("./") as fichiers:
+			for fichier in fichiers:
+				texte += fichier.nom
+	await envoi(ctx, titreM, texte)
+
+@bot.command()
 async def purgeQueue(ctx):
 	guild = ctx.message.guild
 	if (players[guild.id] != None):
