@@ -176,7 +176,7 @@ def joue_url(ctx, guild, url):
 		renom_mus(guild, 1)
 
 		
-	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'.mp3'), after=lambda e: check_queue(ctx, guild))
+	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'__1__.mp3'), after=lambda e: check_queue(ctx, guild))
 		
 	print('done')
 
