@@ -197,7 +197,7 @@ def joue_url(ctx, guild, url, num="ok"):
 	else :
 		print('suivant lancer --------------->')
 
-		
+	players[guild.id].stop()
 	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'__0__.mp3'), after=lambda e: check_queue(ctx, guild))
 		
 	print('done')
@@ -216,6 +216,7 @@ async def join(ctx, guild):
 		players[guild.id] = player
 		#teste si fichier music deja existant si oui suppression
 
+		'''-------------------------obselete-------------------------------------------'''
 		with os.scandir("./") as fichiers:
 			for fichier in fichiers:
 				if fichier.name == 'song'+str(guild.id)+'.mp3':
