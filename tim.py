@@ -16,7 +16,6 @@ bot.remove_command('help')
 players = {}
 queues = {}
 queues_titre = {}
-fichier_music_att = {}
 player = None
 
 @bot.event
@@ -91,15 +90,17 @@ def check_queue(ctx, guild):
 
 		queues[i].pop(0)
 		queues_titre[i].pop(0)
-		fichier_music_att[i].pop(0)
 
 		if queues[i] != []:
 			url = queues[i][0]
 			titre = queues_titre[i][0]
-			modif_fichiers_att(i)
+
+			if len(queues[i]) > 1:
+				url_2 = queues[i][1]
+				telecharge_musique(url_2, guild, 1)
 
 			#son suivant
-			#players[i].play(discord.FFmpegPCMAudio('./music_bot_systeme/suiv.mp3'), after=lambda e: players[i].stop())
+			players[i].play(discord.FFmpegPCMAudio('./music_bot_systeme/suiv.mp3'), after=lambda e: players[i].stop())
 
 			joue_url(ctx, guild, url)
 
@@ -108,38 +109,14 @@ def add_queue(ctx, guild, url):
 	if guild.id in queues and queues[guild.id] != []:
 		queues[guild.id].append(url)
 		queues_titre[guild.id].append(recherche_youtube_titre.main(url))
-		fichier_music_att[guild.id].append('song'+str(guild.id)+'nb'+str(len(queues[guild.id]) - 1)+'nb.mp3')
 
-		print("non premier")
 		telecharge_musique(url, guild, len(queues[guild.id]) - 1)
 	else:
 		queues[guild.id] = [url]
 		queues_titre[guild.id] = [recherche_youtube_titre.main(url)]
-		fichier_music_att[guild.id] = ['song'+str(guild.id)+'nb0nb.mp3']
 
-		print("premier")
 		joue_url(ctx, guild, url, "prems")
 		
-def modif_fichiers_att(id):
-
-	with os.scandir("./") as fichiers:
-		for fichier in fichiers:
-			if fichier.name == 'song'+str(id)+'nb0nb.mp3':
-				os.remove('song'+str(id)+'nb0nb.mp3')
-
-	for nb_fichier in range(len(fichier_music_att[id])):
-
-		print(str(nb_fichier))
-		nv_nom = 'song'+str(id)+'nb'+str(nb_fichier)+'nb.mp3'
-
-		with os.scandir("./") as fichiers:
-			for fichier in fichiers:
-				if fichier.name == fichier_music_att[id][nb_fichier]:
-					os.rename(fichier, nv_nom)
-					fichier_music_att[id][nb_fichier] = nv_nom
-
-
-
 
 def cherche_mot(txt, mot):
 	succes = False
@@ -179,12 +156,13 @@ def se_termine_par(txt, mot):
 			i-=1
 	return succes
 
-def check_musique_suiv():
-	musique_suiv = 'nb0nb.mp3'
+def check_musique_suiv(guild):
+	musique_suiv = 'nb1nb.mp3'
 	with os.scandir("./") as fichiers:
 		for fichier in fichiers:
 			succes = cherche_mot(fichier.name, musique_suiv)
 			if succes == True:
+				os.rename(fichier.name, 'song'+str(guild.id)+'nb0nb.mp3')
 				return True
 	return False
 
@@ -247,7 +225,7 @@ def joue_url(ctx, guild, url, num="ok"):
 					os.remove('song'+str(guild.id)+'nb0nb.mp3')
 
 	#jouer de la musique / dl si pas deja dl en avance
-	if check_musique_suiv() == False:
+	if check_musique_suiv(guild) == False:
 		telecharge_musique(url, guild)
 	else :
 		print('suivant lancer --------------->')
@@ -363,7 +341,6 @@ async def purgeQueue(ctx):
 
 		queues[guild.id] = []
 		queues_titre[guild.id] = []
-		fichier_music_att[guild.id] = []
 
 		with os.scandir("./") as fichiers:
 			for fichier in fichiers:
@@ -380,7 +357,6 @@ async def arrete(ctx):
 
 		queues[guild.id] = []
 		queues_titre[guild.id] = []
-		fichier_music_att[guild.id] = []
 
 		with os.scandir("./") as fichiers:
 			for fichier in fichiers:
