@@ -200,9 +200,11 @@ def telecharge_musique(url, guild, nb=0):
 	}
 	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
 		ydl.download([url])
-	for file in os.listdir("./"):
-		if file.name == nom_fichier:
-			os.rename(file, 'song'+str(guild.id)+'nb'+str(nb)+'nb.mp3')	
+
+	with os.scandir("./") as fichiers:
+			for fichier in fichiers:
+				if fichier.name == nom_fichier:
+					os.rename(fichier, 'song'+str(guild.id)+'nb'+str(nb)+'nb.mp3')	
 
 def joue_url(ctx, guild, url, num="ok"):
 	#suppr ancien fichier
