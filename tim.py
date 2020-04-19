@@ -369,5 +369,4 @@ async def help(ctx):
 
 	await envoi(ctx, titre, texte)
 
-bot.run("Njk4NTkxNTM2NTg1MTEzNzIx.XpwfOQ.JaJs5LR2p-7hTnR7imvnP2yzVSE")	
-#bot.run(str(os.environ.get('TOKEN')))
+bot.run(str(os.environ.get('TOKEN')))
