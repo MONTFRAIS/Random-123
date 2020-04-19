@@ -204,6 +204,7 @@ def telecharge_musique(url, guild, nb=0):
 	with os.scandir("./") as fichiers:
 			for fichier in fichiers:
 				print(fichier.name)
+				print(nom_fichier)
 				if fichier.name == nom_fichier:
 					print("trouver")
 					os.rename(fichier, 'song'+str(guild.id)+'nb'+str(nb)+'nb.mp3')	
