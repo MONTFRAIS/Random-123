@@ -289,15 +289,11 @@ async def joue(ctx, url, *, content=""):
 			url=suppr_apartir(url, "&")
 			await ctx.send("C'est une playliste seul la première a été récuperé")
 
-		await envoi(ctx, titre, "Preparation : "+str(recherche_youtube_titre.main(url)))
-
 		await join(ctx, guild)
 
 		add_queue(ctx, guild, url)
 
-		await ctx.channel.purge(limit=1)
-
-		await envoi(ctx, titre, "Lancement de : \n"+str(recherche_youtube_titre.main(url)))
+		await envoi(ctx, titre, "Ajout a le queue de : "+str(recherche_youtube_titre.main(url)))
 
 	else :
 		recherche_music = str(url)+" "+content
@@ -316,7 +312,7 @@ async def joue(ctx, url, *, content=""):
 
 		await ctx.channel.purge(limit=1)
 
-		await envoi(ctx, titre, "Lancement de : ["+titreMusic+"]("+url_trouver+")")
+		await envoi(ctx, titre, "Ajout a le queue de : ["+titreMusic+"]("+url_trouver+")")
 		
 
 @bot.command()
@@ -400,7 +396,7 @@ async def help(ctx):
 	texte += "purgeQueue\n"
 	texte += "presentation\n"
 	texte += "---------------------\n"
-	texte += "Version : 10.0\n"
+	texte += "Version : 11.0\n"
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
