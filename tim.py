@@ -129,6 +129,7 @@ def modif_fichiers_att(id):
 
 	for nb_fichier in range(len(fichier_music_att[id])):
 
+		print(str(nb_fichier - 1))
 		nv_nom = 'song'+str(id)+'nb'+str(nb_fichier - 1)+'nb.mp3'
 
 		with os.scandir("./") as fichiers:
