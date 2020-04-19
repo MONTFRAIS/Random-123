@@ -399,7 +399,7 @@ async def help(ctx):
 	texte += "purgeQueue\n"
 	texte += "presentation\n"
 	texte += "---------------------\n"
-	texte += "Version : 9.0\n"
+	texte += "Version : 10.0\n"
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
