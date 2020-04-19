@@ -164,6 +164,20 @@ def commence_par(txt, mot):
 				succes = False
 	return succes
 
+def se_termine_par(txt, mot):
+	succes = True
+	if(len(txt)<len(mot)):
+		succes = False
+	else:
+		i = len(mot) - 1
+		j = len(txt) - 1
+		while (i > 0):
+			if txt[j] != mot[i]:
+				return False
+			j-=1
+			i-=1
+	return succes
+
 def check_musique_suiv():
 	musique_suiv = 'nb0nb.mp3'
 	with os.scandir("./") as fichiers:
@@ -196,7 +210,7 @@ def telecharge_musique(url, guild, nb=0):
 	#suppr tout fichier mp3 different des song
 	with os.scandir("./") as fichiers:
 			for fichier in fichiers:
-				if commence_par(str(fichier.name), 'song'+str(guild.id)+'nb') == False and fichier.endswith('.mp3'):
+				if commence_par(str(fichier.name), 'song'+str(guild.id)+'nb') == False and se_termine_par(fichier.name, '.mp3'):
 					os.remove(fichier.name)
 
 	ydl_opts = {
@@ -215,7 +229,7 @@ def telecharge_musique(url, guild, nb=0):
 			for fichier in fichiers:
 				print(fichier.name)
 
-				if fichier.endswith(".mp3"):
+				if se_termine_par(fichier.name, ".mp3"):
 					print("trouver")
 					os.rename(fichier, 'song'+str(guild.id)+'nb'+str(nb)+'nb.mp3')
 					break
@@ -351,7 +365,7 @@ async def purgeQueue(ctx):
 		fichier_music_att[guild.id] = []
 
 		for fichier in os.listdir("./"):
-			if fichier.endswith(".mp3"):
+			if se_termine_par(fichier.name, ".mp3"):
 				os.remove(fichier.name)
 
 @bot.command()
@@ -367,7 +381,7 @@ async def arrete(ctx):
 		fichier_music_att[guild.id] = []
 
 		for fichier in os.listdir("./"):
-			if fichier.endswith(".mp3"):
+			if se_termine_par(fichier.name, ".mp3"):
 				os.remove(fichier)
 
 '''------------------------------------------commande help-------------------------------------'''
@@ -383,7 +397,7 @@ async def help(ctx):
 	texte += "purgeQueue\n"
 	texte += "presentation\n"
 	texte += "---------------------\n"
-	texte += "Version : 8.0\n"
+	texte += "Version : 9.0\n"
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
