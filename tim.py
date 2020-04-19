@@ -364,9 +364,10 @@ async def purgeQueue(ctx):
 		queues_titre[guild.id] = []
 		fichier_music_att[guild.id] = []
 
-		for fichier in os.listdir("./"):
-			if se_termine_par(fichier.name, ".mp3"):
-				os.remove(fichier.name)
+		with os.scandir("./") as fichiers:
+			for fichier in fichiers:
+				if se_termine_par(fichier.name, ".mp3"):
+					os.remove(fichier)
 
 @bot.command()
 async def arrete(ctx):
@@ -380,9 +381,10 @@ async def arrete(ctx):
 		queues_titre[guild.id] = []
 		fichier_music_att[guild.id] = []
 
-		for fichier in os.listdir("./"):
-			if se_termine_par(fichier.name, ".mp3"):
-				os.remove(fichier)
+		with os.scandir("./") as fichiers:
+			for fichier in fichiers:
+				if se_termine_par(fichier.name, ".mp3"):
+					os.remove(fichier)
 
 '''------------------------------------------commande help-------------------------------------'''
 @bot.command()
