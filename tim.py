@@ -154,6 +154,16 @@ def cherche_mot(txt, mot):
 			succes = True
 	return succes
 
+def commence_par(txt, mot):
+	succes = True
+	if(len(txt)<len(mot)):
+		succes = False
+	else:
+		for i in range(len(mot)):
+			if txt[i] != mot[i]:
+				succes = False
+	return succes
+
 def check_musique_suiv():
 	musique_suiv = 'nb0nb.mp3'
 	with os.scandir("./") as fichiers:
@@ -173,21 +183,21 @@ def non_playlist(url):
 	return succes
 
 def lien_youtube_valide(url):
-	succes = True
 	lien_valide = "https://www.youtube.com/watch?v="
-	if(len(url)<len(lien_valide)):
-		succes = False
-	else:
-		for i in range(len(lien_valide)):
-			if url[i] != lien_valide[i]:
-				succes = False
+	succes = commence_par(url, lien_valide)
 	return succes
 
+
+
+
 def telecharge_musique(url, guild, nb=0):
+	#telecharge musique
 
-	titre = str(recherche_youtube_titre.main(url))
-
-	nom_fichier = titre+"-"+str(suppr_apartir_reverse(url, "="))
+	#suppr tout fichier mp3 different des song
+	with os.scandir("./") as fichiers:
+			for fichier in fichiers:
+				if commence_par(str(fichier.name), 'song'+str(guild.id)+'nb') == False and fichier.endswith('.mp3'):
+					os.remove(fichier.name)
 
 	ydl_opts = {
 		'audioformat' : "mp3",
@@ -204,10 +214,14 @@ def telecharge_musique(url, guild, nb=0):
 	with os.scandir("./") as fichiers:
 			for fichier in fichiers:
 				print(fichier.name)
-				print(nom_fichier)
-				if fichier.name == nom_fichier:
+
+				if fichier.endswith(".mp3"):
 					print("trouver")
-					os.rename(fichier, 'song'+str(guild.id)+'nb'+str(nb)+'nb.mp3')	
+					os.rename(fichier, 'song'+str(guild.id)+'nb'+str(nb)+'nb.mp3')
+					break
+
+
+
 
 def joue_url(ctx, guild, url, num="ok"):
 	#suppr ancien fichier
@@ -354,7 +368,7 @@ async def arrete(ctx):
 
 		for fichier in os.listdir("./"):
 			if fichier.endswith(".mp3"):
-				os.remove(fichier.name)
+				os.remove(fichier)
 
 '''------------------------------------------commande help-------------------------------------'''
 @bot.command()
