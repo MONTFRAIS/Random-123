@@ -209,9 +209,9 @@ def telecharge_musique(url, guild, nb=0):
 
 	#suppr tout fichier mp3 different des song
 	with os.scandir("./") as fichiers:
-			for fichier in fichiers:
-				if commence_par(str(fichier.name), 'song'+str(guild.id)+'nb') == False and se_termine_par(fichier.name, '.mp3'):
-					os.remove(fichier.name)
+		for fichier in fichiers:
+			if commence_par(str(fichier.name), 'song'+str(guild.id)+'nb') == False and se_termine_par(fichier.name, '.mp3'):
+				os.remove(fichier.name)
 
 	ydl_opts = {
 		'audioformat' : "mp3",
@@ -226,13 +226,13 @@ def telecharge_musique(url, guild, nb=0):
 		ydl.download([url])
 
 	with os.scandir("./") as fichiers:
-			for fichier in fichiers:
-				print(fichier.name)
+		for fichier in fichiers:
+			print(fichier.name)
 
-				if se_termine_par(fichier.name, ".mp3"):
-					print("trouver")
-					os.rename(fichier, 'song'+str(guild.id)+'nb'+str(nb)+'nb.mp3')
-					break
+			if se_termine_par(fichier.name, ".mp3"):
+				print("trouver")
+				os.rename(fichier, 'song'+str(guild.id)+'nb'+str(nb)+'nb.mp3')
+				break
 
 
 
