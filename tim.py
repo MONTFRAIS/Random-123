@@ -212,13 +212,11 @@ def telecharge_musique(url, guild, nb=0):
 
 
 
-def joue_url(ctx, guild, url, num="ok"):
-	#suppr ancien fichier
-	if num == "prems":
-		with os.scandir("./") as fichiers:
-			for fichier in fichiers:
-				if fichier.name == 'song'+str(guild.id)+'nb0nb.mp3':
-					os.remove('song'+str(guild.id)+'nb0nb.mp3')
+def joue_url(ctx, guild, url):
+	with os.scandir("./") as fichiers:
+		for fichier in fichiers:
+			if fichier.name == 'song'+str(guild.id)+'nb0nb.mp3':
+				os.remove('song'+str(guild.id)+'nb0nb.mp3')
 
 	#jouer de la musique / dl si pas deja dl en avance
 	if check_musique_suiv(guild) == False:
