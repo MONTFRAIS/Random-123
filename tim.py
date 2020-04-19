@@ -304,13 +304,11 @@ async def joue(ctx, url, *, content=""):
 			url_trouver=suppr_apartir(url_trouver, "&")
 			await ctx.send("C'est une playliste seul la première a été récuperé")
 
-		await envoi(ctx, titre, "Preparation : ["+titreMusic+"]("+url_trouver+")")
 
 		await join(ctx, guild)
 
 		add_queue(ctx, guild, url_trouver)
 
-		await ctx.channel.purge(limit=1)
 
 		await envoi(ctx, titre, "Ajout a le queue de : ["+titreMusic+"]("+url_trouver+")")
 		
