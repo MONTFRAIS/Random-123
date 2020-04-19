@@ -99,9 +99,6 @@ def check_queue(ctx, guild):
 				url_2 = queues[i][1]
 				telecharge_musique(url_2, guild, 1)
 
-			#son suivant
-			players[i].play(discord.FFmpegPCMAudio('./music_bot_systeme/suiv.mp3'))
-
 			joue_url(ctx, guild, url)
 
 		
@@ -266,7 +263,6 @@ async def joue(ctx, url, *, content=""):
 			url=suppr_apartir(url, "&")
 			await ctx.send("C'est une playliste seul la première a été récuperé")
 
-		await envoi(ctx, titre, "Preparation : "+str(recherche_youtube_titre.main(url)))
 
 		await join(ctx, guild)
 
@@ -274,7 +270,7 @@ async def joue(ctx, url, *, content=""):
 
 		await ctx.channel.purge(limit=1)
 
-		await envoi(ctx, titre, "Lancement de : \n"+str(recherche_youtube_titre.main(url)))
+		await envoi(ctx, titre, "Ajout de : \n"+str(recherche_youtube_titre.main(url)))
 
 	else :
 		recherche_music = str(url)+" "+content
@@ -285,15 +281,13 @@ async def joue(ctx, url, *, content=""):
 			url_trouver=suppr_apartir(url_trouver, "&")
 			await ctx.send("C'est une playliste seul la première a été récuperé")
 
-		await envoi(ctx, titre, "Preparation : ["+titreMusic+"]("+url_trouver+")")
-
 		await join(ctx, guild)
 
 		add_queue(ctx, guild, url_trouver)
 
 		await ctx.channel.purge(limit=1)
 
-		await envoi(ctx, titre, "Lancement de : ["+titreMusic+"]("+url_trouver+")")
+		await envoi(ctx, titre, "Ajout de : ["+titreMusic+"]("+url_trouver+")")
 		
 
 @bot.command()
@@ -375,7 +369,7 @@ async def help(ctx):
 	texte += "purgeQueue\n"
 	texte += "presentation\n"
 	texte += "---------------------\n"
-	texte += "Version : 12.0\n"
+	texte += "Version : 12.6\n"
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
