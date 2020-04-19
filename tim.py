@@ -100,7 +100,7 @@ def check_queue(ctx, guild):
 				telecharge_musique(url_2, guild, 1)
 
 			#son suivant
-			players[i].play(discord.FFmpegPCMAudio('./music_bot_systeme/suiv.mp3'), after=lambda e: players[i].stop())
+			players[i].play(discord.FFmpegPCMAudio('./music_bot_systeme/suiv.mp3'))
 
 			joue_url(ctx, guild, url)
 
@@ -110,7 +110,6 @@ def add_queue(ctx, guild, url):
 		queues[guild.id].append(url)
 		queues_titre[guild.id].append(recherche_youtube_titre.main(url))
 
-		telecharge_musique(url, guild, len(queues[guild.id]) - 1)
 	else:
 		queues[guild.id] = [url]
 		queues_titre[guild.id] = [recherche_youtube_titre.main(url)]
