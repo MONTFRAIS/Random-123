@@ -111,7 +111,7 @@ def add_queue(ctx, guild, url):
 		queues[guild.id] = [url]
 		queues_titre[guild.id] = [recherche_youtube_titre.main(url)]
 
-		joue_url(ctx, guild, url, "prems")
+		joue_url(ctx, guild, url)
 		
 
 def cherche_mot(txt, mot):
