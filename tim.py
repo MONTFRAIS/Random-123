@@ -158,6 +158,7 @@ def check_musique_suiv(guild):
 		for fichier in fichiers:
 			succes = cherche_mot(fichier.name, musique_suiv)
 			if succes == True:
+				print("trouve et renomme suiv")
 				os.rename(fichier.name, 'song'+str(guild.id)+'nb0nb.mp3')
 				return True
 	return False
@@ -202,7 +203,6 @@ def telecharge_musique(url, guild, nb=0):
 
 	with os.scandir("./") as fichiers:
 		for fichier in fichiers:
-			print(fichier.name)
 
 			if se_termine_par(fichier.name, ".mp3"):
 				print("trouver")
