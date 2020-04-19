@@ -95,10 +95,6 @@ def check_queue(ctx, guild):
 			url = queues[i][0]
 			titre = queues_titre[i][0]
 
-			if len(queues[i]) > 1:
-				url_2 = queues[i][1]
-				telecharge_musique(url_2, guild, 1)
-
 			joue_url(ctx, guild, url)
 
 		
@@ -152,16 +148,6 @@ def se_termine_par(txt, mot):
 			i-=1
 	return succes
 
-def check_musique_suiv(guild):
-	musique_suiv = 'nb1nb.mp3'
-	with os.scandir("./") as fichiers:
-		for fichier in fichiers:
-			succes = cherche_mot(fichier.name, musique_suiv)
-			if succes == True:
-				print("trouve et renomme suiv")
-				os.rename(fichier.name, 'song'+str(guild.id)+'nb0nb.mp3')
-				return True
-	return False
 
 	
 
@@ -219,10 +205,8 @@ def joue_url(ctx, guild, url):
 				os.remove('song'+str(guild.id)+'nb0nb.mp3')
 
 	#jouer de la musique / dl si pas deja dl en avance
-	if check_musique_suiv(guild) == False:
-		telecharge_musique(url, guild)
-	else :
-		print('suivant lancer --------------->')
+	telecharge_musique(url, guild)
+
 
 	players[guild.id].play(discord.FFmpegPCMAudio('song'+str(guild.id)+'nb0nb.mp3'), after=lambda e: check_queue(ctx, guild))
 		
@@ -266,7 +250,6 @@ async def joue(ctx, url, *, content=""):
 
 		add_queue(ctx, guild, url)
 
-		await ctx.channel.purge(limit=1)
 
 		await envoi(ctx, titre, "Ajout de : \n"+str(recherche_youtube_titre.main(url)))
 
@@ -283,7 +266,6 @@ async def joue(ctx, url, *, content=""):
 
 		add_queue(ctx, guild, url_trouver)
 
-		await ctx.channel.purge(limit=1)
 
 		await envoi(ctx, titre, "Ajout de : ["+titreMusic+"]("+url_trouver+")")
 		
