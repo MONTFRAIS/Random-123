@@ -109,7 +109,7 @@ def add_queue(ctx, guild, url):
 	else:
 		queues[guild.id] = [url]
 		queues_titre[guild.id] = [recherche_youtube_titre.main(url)]
-		fichier_music_att[guild.id] = ['song'+str(guild.id)+'nb'+str(len(queues[guild.id]) - 1)+'nb.mp3']
+		fichier_music_att[guild.id] = ['song'+str(guild.id)+'nb0nb.mp3']
 
 		joue_url(ctx, guild, url, "prems")
 		
