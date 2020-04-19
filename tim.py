@@ -71,14 +71,19 @@ def suppr_apartir(txt, c):
 			return tmp
 	return tmp
 def suppr_apartir_reverse(txt, c):
-	tmp = ""
-	i = len(txt)
-	while (i > 0):
-		if txt[i] == c:
-			return tmp
-		tmp += txt[i]
-		i-=1 
-	return tmp
+    tmp = ""
+    tmp_propre=""
+    i = len(txt) - 1
+    while (i > 0):
+        if txt[i] == c:
+            break
+        tmp += txt[i]
+        i-=1
+    j = len(tmp) - 1
+    while (j >= 0):
+        tmp_propre += tmp[j]
+        j -= 1
+    return tmp_propre
 
 def check_queue(ctx, guild):
 	i = guild.id
@@ -105,12 +110,14 @@ def add_queue(ctx, guild, url):
 		queues_titre[guild.id].append(recherche_youtube_titre.main(url))
 		fichier_music_att[guild.id].append('song'+str(guild.id)+'nb'+str(len(queues[guild.id]) - 1)+'nb.mp3')
 
+		print("non premier")
 		telecharge_musique(url, guild, len(queues[guild.id]) - 1)
 	else:
 		queues[guild.id] = [url]
 		queues_titre[guild.id] = [recherche_youtube_titre.main(url)]
 		fichier_music_att[guild.id] = ['song'+str(guild.id)+'nb0nb.mp3']
 
+		print("premier")
 		joue_url(ctx, guild, url, "prems")
 		
 def modif_fichiers_att(id):
@@ -361,5 +368,6 @@ async def help(ctx):
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
-	
-bot.run(str(os.environ.get('TOKEN')))
+
+bot.run("Njk4NTkxNTM2NTg1MTEzNzIx.XpwfOQ.JaJs5LR2p-7hTnR7imvnP2yzVSE")	
+#bot.run(str(os.environ.get('TOKEN')))
