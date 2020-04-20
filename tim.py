@@ -40,14 +40,15 @@ async def on_command_error(ctx, error):
 	'''------embed pour affichage erreur--------'''
 	await envoi(ctx, titre, texte)
 
-async def envoi(ctx, titre, texte):
+async def envoi(ctx, titre, texte, auteur=""):
 	
 	embed = discord.Embed(
 		description = texte,
 		colour = discord.Colour.blue(),
 		title = "**"+titre+"**"
 	)
-	#embed.set_author(name=titre)
+	if auteur != "":
+		embed.set_footer(text="Ajouter par : "+auteur)
 	
 	await ctx.send(embed=embed)
 '''------------------------------------------commandes normales-------------------------------------'''
@@ -236,6 +237,7 @@ async def join(ctx, guild):
 @bot.command()
 async def joue(ctx, url, *, content=""):
 	#variable utile dans tout la def
+	auteur = ctx.message.author
 	guild = ctx.message.guild
 	titre = "Music"
 
@@ -251,7 +253,7 @@ async def joue(ctx, url, *, content=""):
 		add_queue(ctx, guild, url)
 
 
-		await envoi(ctx, titre, "Ajout de : \n"+str(recherche_youtube_titre.main(url)))
+		await envoi(ctx, titre, "Ajout de : \n"+str(recherche_youtube_titre.main(url)), auteur)
 
 	else :
 		recherche_music = str(url)+" "+content
@@ -267,7 +269,7 @@ async def joue(ctx, url, *, content=""):
 		add_queue(ctx, guild, url_trouver)
 
 
-		await envoi(ctx, titre, "Ajout de : ["+titreMusic+"]("+url_trouver+")")
+		await envoi(ctx, titre, "Ajout de : ["+titreMusic+"]("+url_trouver+")", auteur)
 		
 
 @bot.command()
@@ -296,16 +298,9 @@ async def queue(ctx):
 		texte += titre+"\n"
 	await envoi(ctx, titreM, texte)
 
-@bot.command()
-async def fichier(ctx):
-	guild = ctx.message.guild
-	texte = ""
-	titreM = "Music Queue"
-	with os.scandir("./") as fichiers:
-			for fichier in fichiers:
-				texte += fichier.name+"\n"
-	await envoi(ctx, titreM, texte)
-
+"""@bot.command()
+async def playlist(ctx, categorie):
+"""	
 @bot.command()
 async def purgeQueue(ctx):
 	guild = ctx.message.guild
@@ -349,7 +344,7 @@ async def help(ctx):
 	texte += "purgeQueue\n"
 	texte += "presentation\n"
 	texte += "---------------------\n"
-	texte += "Version : 12.6\n"
+	texte += "Version : 13.0\n"
 	titre = 'Commande HELP'
 
 	await envoi(ctx, titre, texte)
